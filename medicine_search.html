@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Medicine Search - Health Sphere</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f8f9fa;
+      padding-top: 40px;
+    }
+    .card {
+      max-width: 700px;
+      margin: 20px auto;
+    }
+    .medicine-image {
+      max-height: 200px;
+      object-fit: contain;
+    }
+  .medicine-details {
+    max-width: 700px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    padding: 25px 30px;
+  }
+  .medicine-details li {
+    padding: 15px 20px;
+    border-bottom: 1px solid #e9ecef;
+    font-size: 1.05rem;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .medicine-details li:last-child {
+    border-bottom: none;
+  }
+  .medicine-details li strong {
+    color: #0d6efd; /* Bootstrap primary color */
+    font-weight: 600;
+    min-width: 180px;
+  }
+  .review-badge {
+    font-weight: 600;
+    padding: 5px 12px;
+  }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1 class="text-center mb-4">Medicine Details</h1>
+
+  <!-- Search Form -->
+  
+
+  <!-- Display Medicine Details -->
+  {% if medicine %}
+  <div class="card shadow">
+    <div class="card-header bg-success text-white">
+      <h4 class="mb-0">{{ medicine["Medicine Name"] }}</h4>
+    </div>
+    <div class="card-body">
+      {% if medicine["Image URL"] %}
+      <div class="text-center mb-3">
+        <img src="{{ medicine['Image URL'] }}" alt="Medicine Image" class="img-fluid rounded medicine-image" />
+      </div>
+      {% endif %}
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><strong>Composition:</strong> {{ medicine["Composition"] }}</li>
+        <li class="list-group-item"><strong>Uses:</strong> {{ medicine["Uses"] }}</li>
+        <li class="list-group-item"><strong>Side Effects:</strong> {{ medicine["Side_effects"] }}</li>
+        <li class="list-group-item"><strong>Manufacturer:</strong> {{ medicine["Manufacturer"] }}</li>
+        <li class="list-group-item"><strong>Excellent Review %:</strong> {{ medicine["Excellent Review %"] }}</li>
+        <li class="list-group-item"><strong>Average Review %:</strong> {{ medicine["Average Review %"] }}</li>
+        <li class="list-group-item"><strong>Poor Review %:</strong> {{ medicine["Poor Review %"] }}</li>
+      </ul>
+    </div>
+  </div>
+  {% elif error %}
+  <div class="alert alert-danger text-center">{{ error }}</div>
+  {% endif %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
