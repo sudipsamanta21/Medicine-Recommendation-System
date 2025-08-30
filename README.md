@@ -22,7 +22,8 @@ python -m venv venv
 ------>
 (venv) C:\Users\YourName\Desktop\medicine>
 
-🔹 This command installs everything you need to run your Medicine Recommendation & Reminder System (web app, dataset handling, machine learning, and SMS notifications).
+🔹 This command installs everything you need to run your Medicine Recommendation & Reminder System 
+   (web app, dataset handling, machine learning, and SMS notifications).
 ------>
 pip install flask pandas numpy twilio scikit-learn
 
