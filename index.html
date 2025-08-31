@@ -4,60 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Health Sphere</title>
+
+  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    .navbar { padding-top: 0.25rem; padding-bottom: 0.25rem; min-height: 55px; }
-    .navbar img { width: 45px; height: 45px; }
-    .toggle-button {
-      padding: 10px; margin: 10px; font-size: 18px; font-weight: bold;
-      min-width: 160px; border-radius: 10px; border: none;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .toggle-button:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-    .custom-modal {
-      border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.25);
-      animation: zoomIn 0.3s ease-in-out;
-    }
-    @keyframes zoomIn {
-      from {transform: scale(0.9); opacity: 0;}
-      to   {transform: scale(1); opacity: 1;}
-    }
-    .custom-modal .modal-body { padding: 30px; font-size: 16px; }
-    .footer {
-      background-color: #1e2f3e; color: white; padding: 20px 0;
-    }
-    .card { max-width: 700px; margin: 20px auto; }
 
-
-#suggestionsList {
-  position: absolute;
-  top: calc(100% + 10px);
-  left: 0;
-  width: 100%;
-  z-index: 9999;
-  max-height: 150px;
-  overflow-y: auto;
-  background-color: hsl(63, 89%, 51%) !important;
-  border: 1px solid #141414;
-  border-top: none;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  margin-top: 10px;
-  color: white;
-}
-
-#suggestionsList li:hover {
-  background-color: hsl(54, 90%, 40%);
-  cursor: pointer;
-}
-
-
-
-
-
-
-  </style>
+  <!-- Custom CSS -->
+  <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
 </head>
-<div>
+<body>
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
@@ -80,76 +34,21 @@
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Tools</a>
           <ul class="dropdown-menu p-3">
-  
-          <li><a href="bmi.html"><button class="btn btn-success w-100 mb-2">⚖️ BMI Calculator</button></a></li>
-          <li><a href="reminder.html"><button class="btn btn-warning w-100">💊 Medication Reminder</button></a></li>
+            <li><a href="bmi.html"><button class="btn btn-success w-100 mb-2">⚖️ BMI Calculator</button></a></li>
+            <li><a href="reminder.html"><button class="btn btn-warning w-100">💊 Medication Reminder</button></a></li>
           </ul>
-
-
         </li>
       </ul>
 
       <!-- Medicine Search in Navbar -->
-      <!-- Inside Navbar -->
-    <form method="POST" action="/medicine_search.html" class="d-flex position-relative">
+      <form method="POST" action="/medicine_search.html" class="d-flex position-relative">
         <input type="text" id="medicineInput" name="name" class="form-control me-2" placeholder="Search Medicine..." autocomplete="off" required />
         <button type="submit" class="btn btn-warning">Search</button>
-        <ul id="suggestionsList" class="list-group position-absolute w-100" style="z-index: 9999; max-height: 150px; overflow-y: auto; left: 0; top: 100%; display: none;"></ul>
-    </form>
-
+        <ul id="suggestionsList" class="list-group position-absolute w-100"></ul>
+      </form>
     </div>
   </div>
 </nav>
-
-
-<script>
-        const input = document.getElementById('medicineInput');
-        const suggestionsList = document.getElementById('suggestionsList');
-        input.addEventListener('input', () => {
-        const query = input.value.trim();
-         if (query.length < 2) {
-      suggestionsList.style.display = 'none';
-      return;
-    }
-    fetch(`/medicine_suggestions?q=${encodeURIComponent(query)}`)
-      .then(response => response.json())
-      .then(suggestions => {
-        suggestionsList.innerHTML = '';
-        if (suggestions.length === 0) {
-          suggestionsList.style.display = 'none';
-          return;
-        }
-        suggestions.forEach(name => {
-          const li = document.createElement('li');
-          li.textContent = name;
-          li.classList.add('list-group-item', 'list-group-item-action');
-          li.style.cursor = 'pointer';
-          li.addEventListener('click', () => {
-            input.value = name;
-            suggestionsList.style.display = 'none';
-          });
-          suggestionsList.appendChild(li);
-        });
-        suggestionsList.style.display = 'block';
-      })
-      .catch(() => {
-        suggestionsList.style.display = 'none';
-      });
-  });
-  // Hide suggestions when clicking outside
-  document.addEventListener('click', (e) => {
-    if (!input.contains(e.target) && !suggestionsList.contains(e.target)) {
-      suggestionsList.style.display = 'none';
-      }
-  });
-</script>
-
-
-
-
-
-
-
 
 <!-- Welcome -->
 <div class="text-center mt-5">
@@ -157,7 +56,6 @@
   <img src="{{ url_for('static', filename='img.png') }}" alt="Health Sphere Logo" class="rounded-circle my-3 border border-2 border-primary" style="width:100px; height:100px;">
   <p class="lead">Your AI-Powered Health Companion</p>
 </div>
-
 
 <!-- Step 1 -->
 {% if not predicted_disease and not step2 %}
@@ -176,8 +74,7 @@
       <label class="form-label">Mobile Number:</label>
       <input type="text" class="form-control" name="mobile" required>
     </div>
-    <button type="submit" class="btn" style="background-color: yellow; color: black;">Next</button>
-
+    <button type="submit" class="btn btn-warning">Next</button>
   </form>
 </div>
 {% endif %}
@@ -190,111 +87,30 @@
     <div class="mb-3">
       <label class="form-label">Write your symptoms (comma separated):</label>
       <input id="symptomsInput" type="text" class="form-control" name="symptoms" placeholder="e.g. fever, cough, headache........" required>
-      
-
-     <button type="button" class="btn-voice ms-2" id="voiceBtn">
-  🎙
-</button>
-
-<style>
-  .btn-voice {
-    background-color: hsl(120, 17%, 98%);  
-    color: black;         
-    border: 2px solid #007bff; 
-    border-radius: 50%;        
-    width: 45px;
-    height: 45px;
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-    transition: 0.3s;
-    margin-top: 10px;
-  }
-
-  /* Hover effect */
-  .btn-voice:hover {
-    background-color: #ed0814;
-    color: rgb(202, 192, 192);
-    transform: scale(1.1);
-  }
-
-  /* Active effect */
-  .btn-voice:active {
-    background-color: #0056b3;
-    transform: scale(0.95);
-  }
-</style>
-
-
-
-
-
-
+      <button type="button" class="btn-voice ms-2" id="voiceBtn">🎙</button>
     </div>
-   <button type="submit" class="btn" style="background-color: yellow; color: black;">
-  Submit Symptoms
-</button>
-
+    <button type="submit" class="btn btn-warning">Submit Symptoms</button>
   </form>
 </div>
-
-<script>
-  const voiceBtn = document.getElementById("voiceBtn");
-  const symptomsInput = document.getElementById("symptomsInput");
-
-  // Check browser support
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-  if (SpeechRecognition) {
-    const recognition = new SpeechRecognition();
-    recognition.continuous = false;
-    recognition.lang = "en-US"; 
-    recognition.interimResults = false;
-
-    voiceBtn.addEventListener("click", () => {
-      recognition.start();
-      voiceBtn.innerText = "🎙 Listening...";
-    });
-
-    recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
-      symptomsInput.value = transcript;
-      voiceBtn.innerText = "🎤";
-    };
-
-    recognition.onerror = () => {
-      voiceBtn.innerText = "🎤";
-      alert("Voice recognition error. Please try again.");
-    };
-
-    recognition.onend = () => {
-      voiceBtn.innerText = "🎤";
-    };
-  } else {
-    voiceBtn.style.display = "none"; // Hide button if not supported
-  }
-</script>
 {% endif %}
 
-<!-- Results -->
+<!-- Results Section -->
 {% if predicted_disease %}
 <h1 class="text-center my-4">Our AI System Results</h1>
 <div class="container text-center">
   <div class="row justify-content-center">
-    <div class="col-md-4"><button class="toggle-button" data-bs-toggle="modal" data-bs-target="#diseaseModal" style="background:#F39334;">Disease</button></div>
-    <div class="col-md-4"><button class="toggle-button" data-bs-toggle="modal" data-bs-target="#descriptionModal" style="background:#268AF3; color:white;">Description</button></div>
-    <div class="col-md-4"><button class="toggle-button" data-bs-toggle="modal" data-bs-target="#precautionModal" style="background:#F371F9; color:white;">Precaution</button></div>
-    <div class="col-md-4"><button class="toggle-button" data-bs-toggle="modal" data-bs-target="#medicationsModal" style="background:#42F36B; color:white;">Medications</button></div>
-    <div class="col-md-4"><button class="toggle-button" data-bs-toggle="modal" data-bs-target="#workoutModal" style="background:#f36842; color:white;">Workout</button></div>
-    <div class="col-md-4"><button class="toggle-button" data-bs-toggle="modal" data-bs-target="#dietModal" style="background:#f34242; color:white;">Diet</button></div>
+    <div class="col-md-4"><button class="toggle-button" data-bs-toggle="modal" data-bs-target="#diseaseModal">Disease</button></div>
+    <div class="col-md-4"><button class="toggle-button" data-bs-toggle="modal" data-bs-target="#descriptionModal">Description</button></div>
+    <div class="col-md-4"><button class="toggle-button" data-bs-toggle="modal" data-bs-target="#precautionModal">Precaution</button></div>
+    <div class="col-md-4"><button class="toggle-button" data-bs-toggle="modal" data-bs-target="#medicationsModal">Medications</button></div>
+    <div class="col-md-4"><button class="toggle-button" data-bs-toggle="modal" data-bs-target="#workoutModal">Workout</button></div>
+    <div class="col-md-4"><button class="toggle-button" data-bs-toggle="modal" data-bs-target="#dietModal">Diet</button></div>
   </div>
 </div>
 {% endif %}
 
-<!-- Modals -->
+<!-- Modals (same as before) -->
+
 <div class="modal fade" id="diseaseModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content custom-modal">
@@ -355,6 +171,9 @@
   </div>
 </div>
 
+
+
+
 <!-- Footer -->
 <footer class="footer text-center mt-5 bg-dark text-light py-4">
   <div class="container">
@@ -368,15 +187,15 @@
       <img src="{{ url_for('static', filename='health.png') }}" alt="Health Awareness Poster" class="img-fluid rounded shadow" style="max-width: 300px;">
       <p class="mt-2">Promoting wellness and preventive care for a better tomorrow.</p>
     </div>
-
-    <!-- Newsletter subscription form removed as per request -->
-
-    <p class="mt-3 mb-0">&copy; 2024 Health Sphere. All rights reserved.</p>
+    <p class="mt-3 mb-0">&copy; 2025 Health Sphere. All rights reserved.</p>
     <small>Empowering your health journey every day.</small>
   </div>
 </footer>
 
-
+<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Custom JS -->
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
